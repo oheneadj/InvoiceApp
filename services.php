@@ -62,7 +62,22 @@
                       <a class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></a>
                   </div>
 
-                  ';
+                  ';} elseif ($_GET["error"] == "updated") {
+                    // code...
+                    echo '
+              <div class="alert alert-important alert-success alert-dismissible" role="alert">
+                  <div class="d-flex">
+                      <div>
+                          <!-- SVG icon code with class="alert-icon" -->
+                      </div>
+                      <div>
+                          The service was updated successfully!
+                      </div>
+                  </div>
+                  <a class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></a>
+              </div>
+
+              ';
                     } else if ($_GET["error"] == "none") {
                         // code...
                         echo '
@@ -165,8 +180,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
                             <div class="table-responsive">
                                 <table class="table card-table table-vcenter text-nowrap datatable">
                                     <thead>
@@ -182,13 +195,11 @@
                                                 </svg>
                                             </th>
                                             <th>Service</th>
-                                            <th>Price</th>
                                             <th></th>
-
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                         <?php
                                         $query = "SELECT * FROM services";
                                         $query_run = mysqli_query($conn, $query);
@@ -206,8 +217,10 @@
                                             <td><span><?= $row['serviceName']; ?></span></td>
                                             <td class="text-end">
                                               <span class="dropdown">
-<!--                                                <a href="./connection/action.php?edittrans=<?= $row['id']; ?>">
-                                                  <button class="btn btn-success btn-sm align-text-top"> <svg
+                                                <form class="" action="editservice.php" method="post">
+                                                  <input type="hidden" name="edit_id" value="<?php echo $row['id']; ?>">
+                                                  <button class="btn btn-success btn-sm align-text-top" type="submit" name="edit_btn">
+                                                    <svg
                                                           xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
                                                           height="24" viewBox="0 0 24 24" stroke-width="2"
                                                           stroke="currentColor" fill="none" stroke-linecap="round"
@@ -218,7 +231,9 @@
                                                           <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
                                                           <line x1="16" y1="5" x2="19" y2="8" />
                                                       </svg>Edit</button>
-                                                    </a>-->
+                                                </form>
+                                            </td>
+                                                  <td>
                                                     <a href="./connection/action.php?serviceremove=<?= $row['id']; ?>" onClick="return confirm('Delete This account?')">
                                                   <button class="btn btn-danger btn-sm align-text-top"><svg
                                                           xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
@@ -234,27 +249,19 @@
                                                       </svg>
                                                       Delete</button>
                                                     </a>
-                          </div>
-                          </span>
-                          </td>
-                                            </td>
-                                        </tr>
+                                                </td>
 
+                                        </tr>
                                         <?php
                                             }
                                         } else {
-
                                             ?>
                                         <tr>
                                             <td colspan="5">No Record Found</td>
                                         </tr>
-
                                         <?php
                                         }
-
                                         ?>
-
-
                                     </tbody>
                                 </table>
                             </div>

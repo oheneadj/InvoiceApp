@@ -39,7 +39,7 @@
 
 <body class="antialiased border-top-wide border-primary d-flex flex-column">
 
-    <div class="flex-fill d-flex flex-column justify-content-center py-4" id="order">
+    <div class="flex-fill d-flex flex-column justify-content-center py-4 p-3" id="order">
 
         <div class="container-tight py-6">
             <a href="./invoice.php" class="btn btn-primary mb-3">Go to Invoice Page</a>
@@ -64,7 +64,7 @@
                         <div class="col text-truncate">
                           <a href="#" class="text-body d-block">
 
-                          ' . $items[$x] . '
+                          ' .$items[$x]. '
 
                           </a>
                         </div>

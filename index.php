@@ -10,7 +10,7 @@
 <html lang="en">
 
 <head>
-    <title>Login in - Joack Consult</title>
+    <title>Login in - Invoice App</title>
     <!-- CSS files -->
     <?php require './includes/head.php'; ?>
 </head>

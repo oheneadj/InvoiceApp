@@ -191,6 +191,20 @@ if (isset($_POST['action']) && isset($_POST['action']) == 'order') {
     echo $data;
 }
 
+// Delete User
+
+if (isset($_GET['userdelete'])) {
+    $id = $_GET['userdelete'];
+
+    $stmt = $conn->prepare("DELETE FROM users WHERE usersId=?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+
+    $_SESSION['showAlert'] = 'block';
+    $_SESSION['message'] = 'Item removed!';
+
+    header('location: ../users.php?error=userdelete');
+}
 
 //Delete from Services
 

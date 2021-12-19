@@ -10,9 +10,13 @@
 <html lang="en">
 
 <head>
-    <title>Users list - Joack Consult.</title>
+
+    <title>Users - Joack Consult.</title>
     <!-- CSS files -->
     <?php require './includes/head.php'; ?>
+
+    <!--Database Connection-->
+    <?php require_once './connection/dbconnect.php'; ?>
 </head>
 
 <body class="antialiased">
@@ -22,21 +26,130 @@
         <!--Header Ends-->
         <div class="content">
             <div class="container-xl">
+
+                <?php
+                if (isset($_GET["error"])) {
+                    // code...
+                    if ($_GET["error"] == "servicealreadyexists") {
+                        // code...
+                        echo '
+
+                  <div class="alert alert-important alert-warning alert-dismissible" role="alert">
+                      <div class="d-flex">
+                          <div>
+                              <!-- SVG icon code with class="alert-icon" -->
+                          </div>
+                          <div>
+                              Sorry! This user already exists in your system.
+                          </div>
+                      </div>
+                      <a class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></a>
+                  </div>
+
+                  ';
+                    } elseif ($_GET["error"] == "stmtfailed") {
+                        // code...
+                        echo '
+                  <div class="alert alert-important alert-warning alert-dismissible" role="alert">
+                      <div class="d-flex">
+                          <div>
+                              <!-- SVG icon code with class="alert-icon" -->
+                          </div>
+                          <div>
+                              Sorry! There was a problem with your request, please try again.
+                          </div>
+                      </div>
+                      <a class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></a>
+                  </div>
+
+                  ';
+                    } else if ($_GET["error"] == "none") {
+                        // code...
+                        echo '
+
+                <div class="alert alert-important alert-success alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            <!-- SVG icon code with class="alert-icon" -->
+                        </div>
+                        <div>
+                            User has been added successfully!
+                        </div>
+                    </div>
+                    <a class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+
+                ';
+                    } else if ($_GET["error"] == "updated") {
+                        // code...
+                        echo '
+
+                <div class="alert alert-important alert-success alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            <!-- SVG icon code with class="alert-icon" -->
+                        </div>
+                        <div>
+                            User has been updated successfully!
+                        </div>
+                    </div>
+                    <a class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+
+                ';
+              } else if ($_GET["error"] == "updateerror") {
+                        // code...
+                        echo '
+
+                <div class="alert alert-important alert-warning alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            <!-- SVG icon code with class="alert-icon" -->
+                        </div>
+                        <div>
+                            Something went wrong whiles processing your request, please try again
+                        </div>
+                    </div>
+                    <a class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+
+                ';
+                    } else if ($_GET["error"] == "userdelete") {
+                        // code...
+                        echo '
+
+                <div class="alert alert-important alert-danger alert-dismissible" role="alert">
+                    <div class="d-flex">
+                        <div>
+                            <!-- SVG icon code with class="alert-icon" -->
+                        </div>
+                        <div>
+                            User account has been deleted and can not be restored.
+                        </div>
+                    </div>
+                    <a class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></a>
+                </div>
+
+                ';
+                    }
+                }
+                ?>
                 <!-- Page title -->
                 <div class="page-header d-print-none">
                     <div class="row align-items-center">
                         <div class="col">
+                            <!-- Page pre-title -->
+                            <div class="page-pretitle">
+                                Dashboard
+                            </div>
                             <h2 class="page-title">
                                 Users
                             </h2>
-                            <div class="text-muted mt-1">1-18 of 413 people</div>
                         </div>
                         <!-- Page title actions -->
                         <div class="col-auto ms-auto d-print-none">
-                            <div class="d-flex">
-                                <input type="search" class="form-control d-inline-block w-9 me-3"
-                                    placeholder="Search user…" />
-                                <a href="./register.php" class="btn btn-primary">
+                            <div class="btn-list">
+                                <a href="register.php" class="btn btn-success d-none d-sm-inline-block">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                         stroke-linecap="round" stroke-linejoin="round">
@@ -44,654 +157,185 @@
                                         <line x1="12" y1="5" x2="12" y2="19" />
                                         <line x1="5" y1="12" x2="19" y2="12" />
                                     </svg>
-                                    New user
+                                    Add a user
+                                </a>
+                                <a href="register.php" class="btn btn-primary d-sm-none btn-icon"  aria-label="Create new report">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                        viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <line x1="12" y1="5" x2="12" y2="19" />
+                                        <line x1="5" y1="12" x2="19" y2="12" />
+                                    </svg>
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row row-cards">
-                    <div class="col-md-6 col-lg-3">
+                <div class="row row-deck row-cards">
+                    <div class="col-12">
                         <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(./static/avatars/000m.jpg)"></span>
-                                <h3 class="m-0 mb-1"><a href="#">Paweł Kuna</a></h3>
-                                <div class="text-muted">UI Designer</div>
-                                <div class="mt-3">
-                                    <span class="badge bg-purple-lt">Owner</span>
+                            <div class="card-header">
+                                <h3 class="card-title">Users</h3>
+                            </div>
+                            <div class="card-body border-bottom py-3">
+                                <div class="d-flex">
+                                    <div class="text-muted">
+                                        Show
+                                        <div class="mx-2 d-inline-block">
+                                            <input type="text" class="form-control form-control-sm" value="8" size="3"
+                                                aria-label="Invoices count">
+                                        </div>
+                                        entries
+                                    </div>
+                                    <div class="ms-auto text-muted">
+                                        Search:
+                                        <div class="ms-2 d-inline-block">
+                                            <input type="text" class="form-control form-control-sm"
+                                                aria-label="Search invoice">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
+
+
+                            <div class="table-responsive">
+                                <table id="example" class="table card-table table-vcenter text-nowrap datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Number</th>
+                                            <th>Password</th>
+                                            <th></th>
+                                            <th></th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <?php
+                                        $query = "SELECT * FROM users";
+                                        $query_run = mysqli_query($conn, $query);
+
+                                        if (mysqli_num_rows($query_run) > 0) {
+                                            // code...
+                                            foreach ($query_run as $row) {
+                                                // code...
+                                                //echo $row['serviceId'];
+                                        ?>
+                                        <tr>
+                                            <td><span class="text-muted"><?= $row['usersName']; ?></span></td>
+                                            <td><span><?= $row['usersEmail']; ?></span></td>
+                                            <td><span><?= $row['usersNumber']; ?></span></td>
+                                            <td><span>*********</span></td>
+                                            <td class="text-end">
+                                              <span class="dropdown">
+                                                <form class="" action="edituser.php" method="post">
+                                                  <input type="hidden" name="edit_id" value="<?php echo $row['usersId']; ?>">
+                                                  <button class="btn btn-success btn-sm align-text-top" type="submit" name="edit_btn"> <svg
+                                                          xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                          height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                          stroke="currentColor" fill="none" stroke-linecap="round"
+                                                          stroke-linejoin="round">
+                                                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                          <path
+                                                              d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
+                                                          <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
+                                                          <line x1="16" y1="5" x2="19" y2="8" />
+                                                      </svg>Edit</button>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                  <a href="./connection/action.php?userdelete=<?= $row['usersId']; ?>" onClick="return confirm('Delete this user?')">
+                                                  <button class="btn btn-danger btn-sm align-text-top"><svg
+                                                          xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                          height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                          stroke="currentColor" fill="none" stroke-linecap="round"
+                                                          stroke-linejoin="round">
+                                                          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                          <line x1="4" y1="7" x2="20" y2="7" />
+                                                          <line x1="10" y1="11" x2="10" y2="17" />
+                                                          <line x1="14" y1="11" x2="14" y2="17" />
+                                                          <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                                                          <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                                                      </svg>
+                                                      Delete</button>
+                                                    </a>
+                                              </div>
+                                              </span>
+                                              </td>
+                                            </td>
+                                        </tr>
+
+                                        <?php
+                                            }
+                                        } else {
+
+                                            ?>
+                                        <tr>
+                                            <td colspan="5">No Record Found</td>
+                                        </tr>
+
+                                        <?php
+                                        }
+
+                                        ?>
+
+
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded">JL</span>
-                                <h3 class="m-0 mb-1"><a href="#">Jeffie Lewzey</a></h3>
-                                <div class="text-muted">Chemical Engineer</div>
-                                <div class="mt-3">
-                                    <span class="badge bg-green-lt">Admin</span>
-                                </div>
+                            <div class="card-footer d-flex align-items-center">
+                                <p class="m-0 text-muted">Showing <span>1</span> to <span>8</span> of <span>16</span>
+                                    entries</p>
+                                <ul class="pagination m-0 ms-auto">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <polyline points="15 6 9 12 15 18" />
+                                            </svg>
+                                            prev
+                                        </a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">
+                                            next <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                <polyline points="9 6 15 12 9 18" />
+                                            </svg>
+                                        </a>
+                                    </li>
+                                </ul>
                             </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(./static/avatars/002m.jpg)"></span>
-                                <h3 class="m-0 mb-1"><a href="#">Mallory Hulme</a></h3>
-                                <div class="text-muted">Geologist IV</div>
-                                <div class="mt-3">
-                                    <span class="badge bg-green-lt">Admin</span>
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(./static/avatars/003m.jpg)"></span>
-                                <h3 class="m-0 mb-1"><a href="#">Dunn Slane</a></h3>
-                                <div class="text-muted">Research Nurse</div>
-                                <div class="mt-3">
-                                    <span class="badge bg-green-lt">Admin</span>
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(./static/avatars/000f.jpg)"></span>
-                                <h3 class="m-0 mb-1"><a href="#">Emmy Levet</a></h3>
-                                <div class="text-muted">VP Product Management</div>
-                                <div class="mt-3">
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(./static/avatars/001f.jpg)"></span>
-                                <h3 class="m-0 mb-1"><a href="#">Maryjo Lebarree</a></h3>
-                                <div class="text-muted">Civil Engineer</div>
-                                <div class="mt-3">
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded">EP</span>
-                                <h3 class="m-0 mb-1"><a href="#">Egan Poetz</a></h3>
-                                <div class="text-muted">Research Nurse</div>
-                                <div class="mt-3">
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(./static/avatars/002f.jpg)"></span>
-                                <h3 class="m-0 mb-1"><a href="#">Kellie Skingley</a></h3>
-                                <div class="text-muted">Teacher</div>
-                                <div class="mt-3">
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(./static/avatars/003f.jpg)"></span>
-                                <h3 class="m-0 mb-1"><a href="#">Christabel Charlwood</a></h3>
-                                <div class="text-muted">Tax Accountant</div>
-                                <div class="mt-3">
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded">HS</span>
-                                <h3 class="m-0 mb-1"><a href="#">Haskel Shelper</a></h3>
-                                <div class="text-muted">Staff Scientist</div>
-                                <div class="mt-3">
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(./static/avatars/006m.jpg)"></span>
-                                <h3 class="m-0 mb-1"><a href="#">Lorry Mion</a></h3>
-                                <div class="text-muted">Automation Specialist IV</div>
-                                <div class="mt-3">
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(./static/avatars/004f.jpg)"></span>
-                                <h3 class="m-0 mb-1"><a href="#">Leesa Beaty</a></h3>
-                                <div class="text-muted">Editor</div>
-                                <div class="mt-3">
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(./static/avatars/007m.jpg)"></span>
-                                <h3 class="m-0 mb-1"><a href="#">Perren Keemar</a></h3>
-                                <div class="text-muted">Analog Circuit Design manager</div>
-                                <div class="mt-3">
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded">SA</span>
-                                <h3 class="m-0 mb-1"><a href="#">Sunny Airey</a></h3>
-                                <div class="text-muted">Nuclear Power Engineer</div>
-                                <div class="mt-3">
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(./static/avatars/009m.jpg)"></span>
-                                <h3 class="m-0 mb-1"><a href="#">Geoffry Flaunders</a></h3>
-                                <div class="text-muted">Software Test Engineer II</div>
-                                <div class="mt-3">
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(./static/avatars/010m.jpg)"></span>
-                                <h3 class="m-0 mb-1"><a href="#">Thatcher Keel</a></h3>
-                                <div class="text-muted">VP Sales</div>
-                                <div class="mt-3">
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(./static/avatars/005f.jpg)"></span>
-                                <h3 class="m-0 mb-1"><a href="#">Dyann Escala</a></h3>
-                                <div class="text-muted">Mechanical Systems Engineer</div>
-                                <div class="mt-3">
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="card">
-                            <div class="card-body p-4 text-center">
-                                <span class="avatar avatar-xl mb-3 avatar-rounded"
-                                    style="background-image: url(./static/avatars/006f.jpg)"></span>
-                                <h3 class="m-0 mb-1"><a href="#">Avivah Mugleston</a></h3>
-                                <div class="text-muted">Actuary</div>
-                                <div class="mt-3">
-                                </div>
-                            </div>
-                            <div class="d-flex">
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg>
-                                    Email</a>
-                                <a href="#" class="card-btn"><svg xmlns="http://www.w3.org/2000/svg"
-                                        class="icon me-2 text-muted" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path
-                                            d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2" />
-                                    </svg>
-                                    Call</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex mt-4">
-                    <ul class="pagination ms-auto">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <polyline points="15 6 9 12 15 18" />
-                                </svg>
-                                prev
-                            </a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">4</a></li>
-                        <li class="page-item"><a class="page-link" href="#">5</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">
-                                next <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                    stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <polyline points="9 6 15 12 9 18" />
-                                </svg>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <footer class="footer footer-transparent d-print-none">
-                <div class="container">
-                    <div class="row text-center align-items-center flex-row-reverse">
-                        <div class="col-lg-auto ms-lg-auto">
-                            <ul class="list-inline list-inline-dots mb-0">
-                                <li class="list-inline-item"><a href="./docs/index.html"
-                                        class="link-secondary">Documentation</a></li>
-                                <li class="list-inline-item"><a href="./license.html" class="link-secondary">License</a>
-                                </li>
-                                <li class="list-inline-item"><a href="https://github.com/tabler/tabler" target="_blank"
-                                        class="link-secondary" rel="noopener">Source code</a></li>
-                            </ul>
-                        </div>
-                        <div class="col-12 col-lg-auto mt-3 mt-lg-0">
-                            <ul class="list-inline list-inline-dots mb-0">
-                                <li class="list-inline-item">
-                                    Copyright &copy; 2021
-                                    <a href="." class="link-secondary">Tabler</a>.
-                                    All rights reserved.
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="./changelog.html" class="link-secondary" rel="noopener">v1.0.0-beta</a>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>
-            </footer>
+            </div>
+            <!--Footer-->
+            <?php require './includes/footer.php'; ?>
         </div>
     </div>
-    <!-- Libs JS -->
-    <!-- Tabler Core -->
-    <script src="./dist/js/tabler.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+    $('#example').DataTable();
+} );
+    </script>
+    <!--Device Type Modal-->
+    <?php require './includes/modals.php'; ?>
+        <!--Scripts-->
+        <?php require './includes/scripts.php'; ?>
+        <!--Scripts Ends-->
 </body>
 
 </html>

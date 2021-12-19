@@ -103,7 +103,7 @@ session_start();
                                 </span>
                             </a>
                         </li>
-                       <!-- <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link" href="transactions.php">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><svg
                                         xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -119,11 +119,11 @@ session_start();
                                     </svg>
                                 </span>
                                 <span class="nav-link-title">
-                                    Transactions
+                                    Report
                                 </span>
                             </a>
-                        </li>-->
-                       <!-- <li class="nav-item">
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="users.php">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block"><svg
                                         xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -140,7 +140,7 @@ session_start();
                                     Users
                                 </span>
                             </a>
-                        </li>-->
+                        </li>
                     </ul>
                     <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
                         <form action="." method="get">

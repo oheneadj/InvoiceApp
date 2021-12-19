@@ -209,7 +209,7 @@
                                                 <th>Price</th>
                                                 <th class="w-1">
                                                     <a href="./connection/action.php?clear=all"
-                                                      onClick="return confirm('Are you sure you want to delete everything?')"  class="btn btn-sm btn-danger me-auto">
+                                                        class="btn btn-sm btn-danger me-auto">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
                                                             height="24" viewBox="0 0 24 24" stroke-width="2"
                                                             stroke="currentColor" fill="none" stroke-linecap="round"
@@ -257,7 +257,7 @@
                                                 <td>
                                                     <div class="btn-list flex-nowrap">
                                                         <a href="./connection/action.php?remove=<?= $row['id']; ?>"
-                                                        onClick="return confirm('Delete this service?')"    class="btn btn-outline-danger me-auto">
+                                                            class="btn btn-outline-danger me-auto">
                                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon"
                                                                 width="24" height="24" viewBox="0 0 24 24"
                                                                 stroke-width="2" stroke="currentColor" fill="none"
