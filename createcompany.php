@@ -10,7 +10,7 @@
 <html lang="en">
 
 <head>
-    <title>Company Details - Invoice App</title>
+    <title> Create New Company - Invoice App</title>
     <!-- CSS files -->
     <?php require './includes/head.php'; ?>
 </head>
@@ -64,63 +64,43 @@
 
       ?>
 
-      <?php
-      //Database Connection
-      require_once './connection/dbconnect.php';
-
-        $query = "SELECT * FROM company WHERE comId = '1'";
-        $query_run = mysqli_query($conn, $query);
-
-        foreach ($query_run as $row ) {
-          // code...
-
-        ?>
-        <form class="card card-md" action="./connection/updatecompany.php" method="post" autocomplete="off">
+        <form class="card card-md" action="./connection/createcompany.php" method="post" autocomplete="off">
             <div class="card-body">
-                <h2 class="card-title text-center mb-4">Update Company Details</h2>
-                <input type="hidden" name="comId" value="1">
-                <div class="mb-3">
+                <h2 class="card-title text-center mb-4">Create New Company</h2>
+                <!-- <div class="mb-3">
                     <label class="form-label">Company Logo</label>
-                    <input type="file" name="comName" value="<?php echo $row['comName']; ?>" class="form-control" required>
-                </div>
+                    <input type="file" name="comName" class="form-control" required>
+                </div> -->
                 <div class="mb-3">
                     <label class="form-label">Company Name</label>
-                    <input type="text" name="comName" value="<?php echo $row['comName']; ?>" class="form-control" required>
+                    <input type="text" name="comName" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label"> Company Address</label>
-                    <input type="text" name="comAddress" value="<?php echo $row['comAddress']; ?>" class="form-control" required>
+                    <input type="text" name="comAddress" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label"> Company Telephone Number</label>
-                    <input type="text" name="comTel" value="<?php echo $row['comTel']; ?>" class="form-control" required>
+                    <input type="text" name="comTel" class="form-control" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Company Email Address</label>
-                    <input type="text" name="comEmail" value="<?php echo $row['comEmail']; ?>" class="form-control" required>
+                    <input type="text" name="comEmail" class="form-control" required>
                 </div>
                 <div class="form-footer text-right">
                   <a href="dashboard.php" class="btn btn-danger">Cancel</a>
-                    <button type="submit" name="updatebtn" class="btn btn-primary">Update Company Details</button>
+                    <button type="submit" name="createbtn" class="btn btn-primary">Create New Company</button>
                 </div>
             </div>
-        <?php
-      }
-
-      ?>
-
-
 
         </div>
         </form>
 
     </div>
     </div>
-    <!-- Libs JS -->
-    <!-- Tabler Core -->
-    <!--Scripts-->
+    <!-- Scripts -->
     <?php require './includes/scripts.php'; ?>
-    <!--Scripts Ends-->
+    <!-- Scripts Ends -->
 </body>
 
 </html>

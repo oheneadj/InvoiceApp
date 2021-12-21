@@ -63,7 +63,40 @@
                   <a class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></a>
               </div>
 
-              ';
+              ';} else if ($_GET["error"] == "updated") {
+                // code...
+                            echo '
+
+                    <div class="alert alert-important alert-success alert-dismissible" role="alert">
+                        <div class="d-flex">
+                            <div>
+                                <!-- SVG icon code with class="alert-icon" -->
+                            </div>
+                            <div>
+                                Your company details has been updated successfully!
+                            </div>
+                        </div>
+                        <a class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></a>
+                    </div>
+
+                    ';
+                } else if ($_GET["error"] == "comperrnone") {
+                    // code...
+                                echo '
+    
+                        <div class="alert alert-important alert-success alert-dismissible" role="alert">
+                            <div class="d-flex">
+                                <div>
+                                    <!-- SVG icon code with class="alert-icon" -->
+                                </div>
+                                <div>
+                                    Your company has been created successfully.
+                                </div>
+                            </div>
+                            <a class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="close"></a>
+                        </div>
+    
+                        ';
                   } else if ($_GET["error"] == "serviceremove") {
                       // code...
                       echo '
